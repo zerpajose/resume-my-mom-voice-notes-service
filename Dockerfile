@@ -4,6 +4,9 @@ FROM node:22-slim
 # Set the working directory
 WORKDIR /usr/src/app
 
+# Install ffmpeg (includes ffprobe) for audio processing
+RUN apt-get update && apt-get install -y ffmpeg
+
 # Copy package.json and package-lock.json
 COPY package*.json ./
 
