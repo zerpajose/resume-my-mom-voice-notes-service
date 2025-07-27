@@ -1,4 +1,4 @@
 export interface UploadVoiceNoteInput {
-  file: File;
+  file: Express.Multer.File;
   chatId: string;
 }

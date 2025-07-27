@@ -1,18 +1,27 @@
+
 import express, { Request, Response } from "express";
 import cors from "cors";
-import { UploadVoiceNoteSchema } from "./src/validations/schemas";
+import multer from "multer";
 import { uploadVoiceNote } from "./src/controllers/upload-voice-note";
 import { finishThread } from "./src/controllers/finish-thread";
+
 
 const app = express();
 app.use(express.json());
 app.use(cors({ origin: "*" }));
 
-app.post('/upload-voice-note/:chatId', async (req: Request, res: Response) => {
+const upload = multer();
+
+app.post('/upload-voice-note/:chatId', upload.single('file'), async (req: Request, res: Response) => {
   try {
-    const { chatId } = req.params;
-    const contactData = UploadVoiceNoteSchema.parse(req.body);
-    await uploadVoiceNote({ ...contactData, chatId });
+    const { params, file } = req;
+    const { chatId } = params;
+    if (!file) {
+      return res.status(400).json({ error: 'No file uploaded' });
+    }
+    // If you want to validate other fields, add them to the schema and parse req.body
+    // For now, just pass the buffer
+    await uploadVoiceNote({ file, chatId });
     res.status(201).json({ message: "Voice note uploaded successfully" });
   } catch (error) {
     console.error({ error });
