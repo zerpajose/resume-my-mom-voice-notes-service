@@ -28,6 +28,7 @@ export async function finishThread(chatId: string) {
   const bucketName = config.bucketName;
   const mergedFileKey = await mergeAudioFiles(fileKeys, bucketName);
   const transcription = await transcribeSpeech(mergedFileKey);
+  console.log({ transcription });
   const summary = await aiResume(transcription);
 
   await document.docs[0].ref.update({
