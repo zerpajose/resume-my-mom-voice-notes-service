@@ -1,20 +1,21 @@
+import config from '../config/environment.js';
 import speech from '@google-cloud/speech';
 
-export async function transcribeSpeech(file: Buffer): Promise<string> {
+export async function transcribeSpeech(fileKey: string): Promise<string> {
 
   const client = new speech.SpeechClient();
   const languageCode = 'es-US';
 
-  const config = {
+  const configuration = {
     languageCode,
   };
 
   const audio = {
-    content: file,
+    uri: `gs://${config.bucketName}/${fileKey}`,
   };
 
   const request = {
-    config: config,
+    config: configuration,
     audio: audio,
   };
 

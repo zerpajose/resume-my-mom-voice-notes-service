@@ -26,8 +26,8 @@ export async function finishThread(chatId: string) {
     throw new Error("No files to merge in this thread");
   }
   const bucketName = config.bucketName;
-  const mergedFile = await mergeAudioFiles(fileKeys, bucketName);
-  const transcription = await transcribeSpeech(mergedFile);
+  const mergedFileKey = await mergeAudioFiles(fileKeys, bucketName);
+  const transcription = await transcribeSpeech(mergedFileKey);
   const summary = await aiResume(transcription);
 
   await document.docs[0].ref.update({

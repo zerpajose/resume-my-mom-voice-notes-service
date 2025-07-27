@@ -13,7 +13,7 @@ export async function uploadVoiceNote(voiceNote: UploadVoiceNoteInput) {
     chatId,
   } = voiceNote;
 
-  const fileName = `${chatId}/${randomUUID()}/${file.originalname}`;
+  const fileName = `${chatId}/${randomUUID()}.${file.originalname.split('.').pop()}`;
   await uploadStorageFile(fileName, file.buffer);
 
   const document = await collection

@@ -41,12 +41,13 @@ export async function mergeAudioFiles(fileKeys: string[], bucketName: string, ou
       .mergeToFile(mergedFilePath, tmpDir);
   });
 
-  // Read merged file into buffer
-  const mergedBuffer = fs.readFileSync(mergedFilePath);
+  // Upload merged file to storage
+  await storage.bucket(bucketName).upload(mergedFilePath, { destination: mergedFileName });
 
   // Cleanup
   localFiles.forEach(f => fs.unlinkSync(f));
   fs.unlinkSync(mergedFilePath);
 
-  return mergedBuffer;
+  // Return the file key (path in bucket)
+  return mergedFileName;
 }
