@@ -19,6 +19,10 @@ export async function mergeAudioFiles(fileKeys: string[], bucketName: string, ou
   const localFiles: string[] = [];
   for (const key of fileKeys) {
     const localPath = path.join(tmpDir, key);
+    const parentDir = path.dirname(localPath);
+    if (!fs.existsSync(parentDir)) {
+      fs.mkdirSync(parentDir, { recursive: true });
+    }
     await storage.bucket(bucketName).file(key).download({ destination: localPath });
     localFiles.push(localPath);
   }
