@@ -6,7 +6,12 @@ export async function transcribeSpeech(fileKey: string): Promise<string> {
   const languageCode = 'es-US';
 
   const configuration = {
+    model: 'latest_long',
     encoding: 'MP3' as 'LINEAR16' | 'FLAC' | 'MP3' | 'OGG_OPUS',
+    sampleRateHertz: 48000,
+    audioChannelCount: 1,
+    enableWordTimeOffsets: true,
+    enableWordConfidence: true,
     languageCode,
   };
 
@@ -19,17 +24,19 @@ export async function transcribeSpeech(fileKey: string): Promise<string> {
     audio: audio,
   };
 
-  // Detects speech in the audio file. This creates a recognition job that you
-  // can wait for now, or get its result later.
   const [operation] = await client.longRunningRecognize(request);
-  // Get a Promise representation of the final result of the job
   const [response] = await operation.promise();
-  const transcription = (response.results ?? [])
+  if(!response.results) {
+    throw new Error('No transcription results found');
+  }
+  const transcription = response.results
     .map(result => {
-      const alternatives = result.alternatives ?? [];
-      return alternatives[0]?.transcript ?? '';
+      if (!result.alternatives) {
+        throw new Error('No alternatives found for result');
+      }
+      return result.alternatives[0].transcript;
     })
-    .filter(Boolean)
     .join('\n');
+
   return transcription;
 }
