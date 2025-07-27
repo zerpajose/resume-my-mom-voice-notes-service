@@ -2,11 +2,11 @@ import config from '../config/environment.js';
 import speech from '@google-cloud/speech';
 
 export async function transcribeSpeech(fileKey: string): Promise<string> {
-
   const client = new speech.SpeechClient();
   const languageCode = 'es-US';
 
   const configuration = {
+    encoding: 'MP3' as 'LINEAR16' | 'FLAC' | 'MP3' | 'OGG_OPUS',
     languageCode,
   };
 
