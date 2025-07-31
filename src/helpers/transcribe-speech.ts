@@ -1,5 +1,6 @@
 import config from '../config/environment.js';
 import speech from '@google-cloud/speech';
+import { storage } from '../clients/storage.client.js';
 
 export async function transcribeSpeech(fileKey: string): Promise<string> {
   const client = new speech.SpeechClient();
@@ -37,6 +38,8 @@ export async function transcribeSpeech(fileKey: string): Promise<string> {
       return result.alternatives[0].transcript;
     })
     .join('\n');
+  
+  await storage.bucket(config.bucketName).file(fileKey).delete().catch(() => {});
 
   return transcription;
 }

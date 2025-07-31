@@ -44,6 +44,10 @@ export async function mergeAudioFiles(fileKeys: string[], bucketName: string, ou
   // Upload merged file to storage
   await storage.bucket(bucketName).upload(mergedFilePath, { destination: mergedFileName });
 
+  for (const key of fileKeys) {
+    await storage.bucket(bucketName).file(key).delete().catch(() => {});
+  }
+
   // Cleanup
   localFiles.forEach(f => fs.unlinkSync(f));
   fs.unlinkSync(mergedFilePath);
