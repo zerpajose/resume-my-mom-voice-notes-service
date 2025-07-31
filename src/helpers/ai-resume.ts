@@ -3,7 +3,7 @@ import { getSecret } from "../clients/secret-manager.js";
 import config from "../config/environment.js"
 
 async function initGoogleGenAIClient() {
-  const geminiApikey = await getSecret(config.googleProjectId, config.geminiApiKey);
+  const geminiApikey = await getSecret(config.googleProjectNumber, config.geminiApiKey);
   const ai = new GoogleGenAI({ apiKey: geminiApikey });
   if (!ai) {
     throw new Error("Failed to initialize GoogleGenAI client");

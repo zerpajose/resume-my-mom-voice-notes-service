@@ -7,5 +7,5 @@ import config from '../config/environment.js';
  * @see https://googleapis.dev/nodejs/firestore/latest/Firestore.html
  */
 export const db = new Firestore({
-  projectId: config.googleProjectName,
+  projectId: config.googleProjectId,
 });
