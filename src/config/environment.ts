@@ -5,4 +5,5 @@ export default {
   collectionName: "resume-my-mom-notes-collection",
   bucketName: "my-mom-voice-notes",
   geminiApiKey: "GEMINI_API_KEY",
+  jwtSecretName: "JWT_SECRET"
 }
